@@ -1,3 +1,5 @@
+import fs from 'fs'
+
 import Config from '../model/config'
 import Folder, { follow } from '../model/folder'
 import File, { parsePath } from '../model/file'
@@ -5,6 +7,14 @@ import File, { parsePath } from '../model/file'
 const config = new Config({sync: true})
 
 var baseFolder = new Folder(`/${__dirname}/${config.files.path}`, '')
+try {
+  fs.mkdirSync(`/${__dirname}/${config.files.tmp}`)
+  fs.mkdirSync(`/${__dirname}/${config.log.path}`)
+} catch (e) {
+  if (e.code != 'EEXIST') {
+    console.error(e)
+  }
+}
 
 if (!baseFolder.exist) {
   baseFolder.create()
@@ -16,9 +26,9 @@ function broadcastChange (io, folder) {
 }
 
 module.exports = (app) => {
-  baseFolder.on('change', () => broadcastChange(app.io, baseFolder))
+  baseFolder.on('change', (folder) => broadcastChange(app.io, folder))
   if (app.ioSSL) {
-    baseFolder.on('change', () => broadcastChange(app.ioSSL, baseFolder))
+    baseFolder.on('change', (folder) => broadcastChange(app.ioSSL, folder))
   }
 
   app.get('/folder', (req, res) => {
