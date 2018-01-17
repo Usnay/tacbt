@@ -14,8 +14,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lunik/tcloud.git"
-  },
+    "url": "git+https://github.com/Usnay/tacbt.git"
+   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -39,7 +39,7 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
     "svg-react-loader": "^0.4.5",
-    "uglifyjs-webpack-plugin": "^1.1.5",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "unminified-webpack-plugin": "^1.4.1",
     "webpack": "^3.8.1",
     "webpack-node-externals": "^1.6.0",
@@ -59,13 +59,11 @@
     "express": "^4.16.2",
     "fs-extra": "^5.0.0",
     "jquery": "^3.2.1",
-    "material-components-web": "^0.25.0",
-    "morgan": "^1.9.0",
+    "material-components-web": "^0.24.0",
     "nedb": "^1.8.0",
-    "react": "~15.6.2",
-    "react-dom": "~16.1.0",
-    "react": "~16.1.0",
     "nprogress": "^0.2.0",
+    "react": "~15.6.2",
+    "react-dom": "~15.6.2",
     "react-material-components-web": "^0.1.18",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
