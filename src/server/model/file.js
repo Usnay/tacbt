@@ -57,7 +57,7 @@ export default class File extends EventEmitter {
     }
   }
 
-  updateMetadata () {
+  updateMetadata (callback) {
     fs.stat(this.fullPath(), (err, stats) => {
       if (err) {
         this.mtime = null
@@ -68,20 +68,38 @@ export default class File extends EventEmitter {
         this._size = stats.size // Bytes
         this.exist = true
       }
+
+      if (callback instanceof Function) callback()
     })
   }
 
   watchChange (eventType, filename) {
-    this.updateMetadata()
-    if (new Date() - this.idle.date >= this.idle.timeout) {
-      this.idle.date = new Date()
-      this.emit('change')
-    }
+    this.updateMetadata(() => this.emitChange())
+  }
+
+  emitChange () {
+    return new Promise((resolve, reject) => {
+      if (new Date() - this.idle.date >= this.idle.timeout) {
+        this.idle.date = new Date()
+        resolve()
+        this.emit('change', this)
+      }
+    })
   }
 
   fullPath () {
     return `${this._path}/${this.name}`
   }
+
+  relativePath () {
+    let cleanBase = this.base.split('/').slice(2).join('/')
+    if (this.base.split('/').length === 1) {
+      return ''
+    } else {
+      return Path.join(cleanBase, this.name)
+    }
+  }
+
   size () {
     return this._size
   }
@@ -140,7 +158,7 @@ export default class File extends EventEmitter {
     let cleanBase = this.base.split('/').slice(2).join('/')
     let url = Path.join('/folder', cleanBase, this.name)
     let download = '/dl/' + Crypto.Rabbit.encrypt(Path.join(cleanBase, this.name), config.server.masterKey).toString()
-    let path = Path.join(cleanBase, this.name)
+    let path = this.relativePath()
     return {
       name: this.name,
       type: this.type,

@@ -10,6 +10,11 @@ export default class Folder extends File {
     if (this.exist) {
       this.initFolder()
     }
+
+    this.idle = {
+      date: new Date(),
+      timeout: 1000
+    }
   }
 
   initManualWatch (timeout) {
@@ -18,7 +23,7 @@ export default class Folder extends File {
     }, timeout)
   }
 
-  initFolder () {
+  initFolder (callback) {
     var oldChilds = this.childs
     var newChilds = []
     var childs = []
@@ -44,22 +49,27 @@ export default class Folder extends File {
         oldChilds[index]._size = child._size
         newChilds.push(oldChilds[index])
       } else {
-        child.on('change', () => this.emit('change'))
-        child.on('startDownload', () => this.emit('change'))
-        child.on('finishDownload', () => this.emit('change'))
-        child.on('locked', () => this.emit('change'))
-        child.on('unlocked', () => this.emit('change'))
+        child.on('change', (file) => this.emit('change', file))
+        child.on('startDownload', (file) => this.emit('change', file))
+        child.on('finishDownload', (file) => this.emit('change', file))
+        child.on('locked', (file) => this.emit('change', file))
+        child.on('unlocked', (file) => this.emit('change', file))
+        child.on('remove', (file) => {
+          this.handleChildRemove(child)
+          this.emit('change', this)
+        })
         newChilds.push(child)
       }
     }
 
     this.childs = newChilds
+    if (callback instanceof Function) callback()
   }
 
   watchChange (eventType, filename) {
-    this.initMetadata()
-    this.initFolder()
-    this.emit('change')
+    this.updateMetadata(() => {
+      this.initFolder(() => this.emit('change', this))
+    })
   }
 
   handleChildRemove (child) {
