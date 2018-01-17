@@ -28,7 +28,12 @@ module.exports = (app) => {
         if (validToken) {
           next()
         } else {
-          res.redirect(loginPage)
+          if ( req.url === '/') {
+            res.redirect(loginPage)
+          } else {
+            res.status(403)
+            res.end('Unauthorized')
+          }
         }
       }
     }
