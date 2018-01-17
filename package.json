@@ -1,9 +1,10 @@
 {
-  "name": "tcloud",
-  "version": "0.7.4",
+  "name": "tacbt",
+  "version": "0.7.8",
   "description": "Filesharing and torrent downloading",
   "main": "index.js",
   "scripts": {
+    "postinstall": "bash ./scripts/heroku",
     "build": "NODE_ENV=production webpack -p",
     "start": "node build/server.js",
     "dev": "webpack --config dev/webpack.server.config.js",
@@ -15,12 +16,6 @@
     "type": "git",
     "url": "git+https://github.com/Lunik/tcloud.git"
   },
-  "author": "Guillaume Lunik",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Lunik/tcloud/issues"
-  },
-  "homepage": "https://github.com/Lunik/tcloud#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -66,13 +61,17 @@
     "jquery": "^3.2.1",
     "material-components-web": "^0.24.0",
     "nedb": "^1.8.0",
-    "nprogress": "^0.2.0",
     "react": "~15.6.2",
-    "react-dom": "~15.6.2",
+    "react-dom": "~16.1.0",
+    "react": "~16.1.0",
+    "nprogress": "^0.2.0",
     "react-material-components-web": "^0.1.18",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
     "torrent-search-api": "^1.0.25",
     "webtorrent": "^0.98.20"
+  },
+    "engines": {
+    "node": ">=9.2.0"
   }
-}
+ }
