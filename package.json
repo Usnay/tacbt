@@ -1,5 +1,5 @@
 {
-  "name": "tcloud",
+  "name": "tacbt",
   "version": "0.7.8",
   "description": "Filesharing and torrent downloading",
   "main": "index.js",
